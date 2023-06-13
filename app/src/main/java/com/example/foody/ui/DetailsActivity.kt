@@ -21,12 +21,14 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_details.*
 import java.lang.Exception
+import android.media.MediaPlayer
 
 @AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
 
     private val args by navArgs<DetailsActivityArgs>()
     private val mainViewModel: MainViewModel by viewModels()
+    private lateinit var mediaPlayer: MediaPlayer
 
     private var recipeSaved = false
     private var savedRecipeId = 0
@@ -34,6 +36,9 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.music)
+        mediaPlayer.start()
 
         setSupportActionBar(toolbar)
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
@@ -134,5 +139,11 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun changeMenuItemColor(item: MenuItem, color: Int) {
         item.icon.setTint(ContextCompat.getColor(this, color))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 }
